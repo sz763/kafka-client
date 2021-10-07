@@ -5,7 +5,7 @@ import com.github.svart63.kc.ui.ContentPanel
 import com.github.svart63.kc.ui.MainWindow
 import com.github.svart63.kc.ui.ThemeService
 import com.github.svart63.kc.ui.TopicPanel
-import com.github.svart63.kc.ui.swing.actions.MousePressed
+import com.github.svart63.kc.ui.swing.utilities.MousePressed
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import java.awt.BorderLayout
@@ -17,10 +17,10 @@ import javax.swing.border.EmptyBorder
 
 @Component
 class SwingWindow @Autowired constructor(
-    private val themeService: ThemeService,
     private val topicPanel: TopicPanel,
     private val contentPanel: ContentPanel,
-    private val config: Config
+    private val config: Config,
+    private val themeService: ThemeService,
 ) : MainWindow {
     private val mainFrame = JFrame("Kafka-Client")
     private val mainContainer = JPanel()
@@ -35,6 +35,9 @@ class SwingWindow @Autowired constructor(
     @PostConstruct
     fun show() {
         mainFrame.pack()
+        mainFrame.setLocationRelativeTo(null)
+        themeService.initDefaultTheme()
+        mainFrame.isVisible = true
     }
 
     private fun addPanels() {
@@ -52,7 +55,6 @@ class SwingWindow @Autowired constructor(
         mainFrame.contentPane = mainContainer
         mainFrame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
         mainFrame.preferredSize = dimension
-        mainFrame.isVisible = true
     }
 
     private fun addMenu() {

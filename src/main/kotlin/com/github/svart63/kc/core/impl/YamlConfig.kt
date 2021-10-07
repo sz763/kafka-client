@@ -1,5 +1,6 @@
 package com.github.svart63.kc.core.impl
 
+import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
@@ -12,6 +13,7 @@ import javax.annotation.PostConstruct
 @Component
 class YamlConfig : Config {
     private val configName = "./config.yml"
+    private val typeRef = object : TypeReference<Map<String, Any>>() {}
 
     @Transient
     private val mapper = ObjectMapper(YAMLFactory());
@@ -29,4 +31,10 @@ class YamlConfig : Config {
     }
 
     override fun defaultTheme(): String = tree.get("theme").textValue()
+
+    override fun asMap(key: String, vararg keys: String): Map<String, Any> {
+        var node = tree.get(key)
+        keys.forEach { node = node.get(it) }
+        return mapper.convertValue(node, typeRef)
+    }
 }
