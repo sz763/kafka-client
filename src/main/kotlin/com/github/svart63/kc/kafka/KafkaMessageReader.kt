@@ -39,8 +39,7 @@ class KafkaMessageReader @Autowired constructor(
         val props = Properties()
         config.asMap("kafka").forEach(props::put)
         val builder = StreamsBuilder()
-        builder.stream<ByteArray, ByteArray>(topic)
-            .map { k, v -> KeyValue(String(k), String(v)) }
+        builder.stream<String, String>(topic)
             .peek { key, value -> log.info("Received: key={}, value={}", key, value) }
             .foreach { k, v -> eventBroker.pushEvent(Pair(k, v)) }
         streams = KafkaStreams(builder.build(), props)

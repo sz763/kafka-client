@@ -4,7 +4,7 @@ kafka:
   application.id: kafka_tool_qa1
   enable.auto.commit: false
   auto.offset.reset: earliest
-  bootstrap.servers: "localhost:19092"
+  bootstrap.servers: "localhost:9092"
   default.key.desr: org.apache.kafka.common.serialization.Serdes$StringSerde
   default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
   key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
