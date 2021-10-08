@@ -44,4 +44,7 @@ class VectorDataHandler : TableDataHandler<Vector<Vector<String>>, String, Vecto
         })
     }
 
+    override fun clear() {
+        data.clear()
+    }
 }

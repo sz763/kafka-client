@@ -2,6 +2,7 @@ package com.github.svart63.kc.ui.swing.components
 
 import com.github.svart63.kc.core.DataFilter
 import com.github.svart63.kc.core.TableDataHandler
+import com.github.svart63.kc.core.TextFormatterService
 import com.github.svart63.kc.core.impl.ContainsDataFilter
 import com.github.svart63.kc.core.impl.NoopDataFilter
 import com.github.svart63.kc.ui.ContentPanel
@@ -14,21 +15,24 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component
 import java.awt.BorderLayout
+import java.awt.Toolkit
+import java.awt.datatransfer.StringSelection
 import java.awt.event.KeyEvent
+import java.awt.event.MouseEvent.BUTTON2
 import java.util.*
-import javax.swing.JLabel
-import javax.swing.JOptionPane
-import javax.swing.JScrollPane
-import javax.swing.JTable
+import javax.swing.*
+
+private const val KEY_HEADER = "Key"
+private const val VALUE_HEADER = "Value"
 
 @Component
 class SwingContentPanel @Autowired constructor(
     @Qualifier("data_handler_table")
     private val dataHandler: TableDataHandler<Vector<Vector<String>>, String, Vector<String>>,
-    private val preview: PreviewService
+    private val preview: PreviewService,
+    private val formatter: TextFormatterService
 ) : ContentPanel, SwingPanel("Events") {
-    private val KEY_HEADER = "Key"
-    private val VALUE_HEADER = "Value"
+
     private val tableModel = NotEditableTableModel()
     private val table = JTable(tableModel)
     private var valueFilterValue: String = ""
@@ -36,6 +40,8 @@ class SwingContentPanel @Autowired constructor(
     private val filterStatus = JLabel("Filtered by: ")
     private var valueFilter: DataFilter<String> = NoopDataFilter()
     private var keyFilter = valueFilter
+    private val copyItem = JMenuItem("Copy")
+    private val saveItem = SwingSaveMenuItem { formatter.format(cellValue() ?: "") }
 
     init {
         initTable()
@@ -72,13 +78,74 @@ class SwingContentPanel @Autowired constructor(
                 tableModel.clear()
                 applyFilter()
             }
+
+            if (e.isControlDown && e.isShiftDown && e.keyCode == KeyEvent.VK_C) {
+                val cellValue = cellValue()
+                copyToClipboard(cellValue)
+            } else if (e.isControlDown && e.keyCode == KeyEvent.VK_C) {
+                copyCellValue()
+            }
         })
         table.addMouseListener(MousePressed { e ->
             if (e.clickCount == 2) {
                 preview.show(table.getValueAt(table.selectedRow, table.selectedColumn) as String)
             }
+            if (e.button == BUTTON2) {
+                copyCellValue()
+            }
+            val isCellSelected = table.selectedRow > -1 && table.selectedColumn > -1
+            copyItem.isEnabled = isCellSelected
+            saveItem.isEnabled = isCellSelected
         })
         tableModel.values(dataHandler.values())
+        initTablePopup()
+    }
+
+    private fun initTablePopup() {
+        val menu = JPopupMenu()
+        copyItem.addMouseListener(MousePressed { copyCellValue() })
+        copyItem.isEnabled = false
+        val clear = JMenuItem("Clear Table")
+        clear.addMouseListener(MousePressed {
+            val dialog = JOptionPane.showConfirmDialog(
+                this,
+                "Are you sure want to clear table?",
+                "Confirmation",
+                JOptionPane.OK_CANCEL_OPTION
+            )
+            if (dialog == 0) {
+                dataHandler.clear()
+                tableModel.clear()
+            }
+        })
+        val spacer = JMenuItem(" ")
+        spacer.isEnabled = false
+        menu.add(copyItem)
+        menu.add(saveItem)
+        menu.add(spacer)
+        menu.add(clear)
+        table.componentPopupMenu = menu
+    }
+
+    private fun copyCellValue() {
+        val cellValue = cellValue()?.let { formatter.format(it) }
+        copyToClipboard(cellValue)
+    }
+
+    private fun copyToClipboard(cellValue: String?) {
+        cellValue?.let {
+            val selection = StringSelection(it)
+            Toolkit.getDefaultToolkit().systemClipboard.setContents(selection, null)
+        }
+    }
+
+    private fun cellValue(): String? {
+        val row = table.selectedRow
+        val cell = table.selectedColumn
+        if (row < 0 || cell < 0) {
+            return null
+        }
+        return table.getValueAt(row, cell) as String
     }
 
     private fun handleKeyFilter() {

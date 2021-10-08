@@ -15,8 +15,7 @@ class YamlConfig : Config {
     private val configName = "./config.yml"
     private val typeRef = object : TypeReference<Map<String, Any>>() {}
 
-    @Transient
-    private val mapper = ObjectMapper(YAMLFactory());
+    private val mapper = ObjectMapper(YAMLFactory())
     private lateinit var tree: JsonNode
 
     @PostConstruct
@@ -37,4 +36,6 @@ class YamlConfig : Config {
         keys.forEach { node = node.get(it) }
         return mapper.convertValue(node, typeRef)
     }
+
+    override fun resetToBeginningAtShutdown(): Boolean = tree.get("stream").get("reset_at_shutdown").asBoolean()
 }

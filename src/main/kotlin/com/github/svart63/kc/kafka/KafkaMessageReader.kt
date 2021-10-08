@@ -2,18 +2,18 @@ package com.github.svart63.kc.kafka
 
 import com.github.svart63.kc.core.Config
 import com.github.svart63.kc.core.EventBroker
-import org.apache.kafka.common.serialization.Serdes
+import org.apache.kafka.clients.consumer.KafkaConsumer
+import org.apache.kafka.common.TopicPartition
 import org.apache.kafka.streams.KafkaStreams
 import org.apache.kafka.streams.KeyValue
 import org.apache.kafka.streams.StreamsBuilder
-import org.apache.kafka.streams.StreamsConfig
-import org.apache.kafka.streams.kstream.KeyValueMapper
+import org.apache.kafka.streams.errors.StreamsUncaughtExceptionHandler
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.Duration
-import java.util.Properties
+import java.util.*
 
 @Service
 class KafkaMessageReader @Autowired constructor(
@@ -24,14 +24,16 @@ class KafkaMessageReader @Autowired constructor(
     private val log = LoggerFactory.getLogger(this::class.java)
     private var isRunning = false
     private var topicName = ""
-    private val exceptionHandler = Thread.UncaughtExceptionHandler { _, exception: Throwable ->
+    private val exceptionHandler = StreamsUncaughtExceptionHandler { exception ->
         log.error("Unexpected error occurred ${exception.message}", exception)
+        StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.SHUTDOWN_APPLICATION
     }
 
     fun start(topic: String) {
         if (topic == topicName) {
             return
         }
+        topicName = topic
         if (isRunning) {
             stop()
         }
@@ -39,7 +41,8 @@ class KafkaMessageReader @Autowired constructor(
         val props = Properties()
         config.asMap("kafka").forEach(props::put)
         val builder = StreamsBuilder()
-        builder.stream<String, String>(topic)
+        builder.stream<ByteArray, ByteArray>(topic)
+            .map { k: ByteArray?, v: ByteArray? -> KeyValue(stringOf(k), stringOf(v)) }
             .peek { key, value -> log.info("Received: key={}, value={}", key, value) }
             .foreach { k, v -> eventBroker.pushEvent(Pair(k, v)) }
         streams = KafkaStreams(builder.build(), props)
@@ -49,15 +52,29 @@ class KafkaMessageReader @Autowired constructor(
         isRunning = true
     }
 
-    fun stop() {
-        log.info("Stop reading topic")
-        streams.close(Duration.ofSeconds(10))
+    private fun stringOf(array: ByteArray?): String = array?.let(::String) ?: ""
 
+    private fun stop() {
+        log.info("Stop reading topic: $topicName")
+        streams.close(Duration.ofSeconds(10))
         streams.cleanUp()
         isRunning = false
+        resetToBeginning(topicName)
     }
 
     override fun destroy() {
         stop()
+    }
+
+    private fun resetToBeginning(topic: String) {
+        KafkaConsumer<Any, Any>(config.asMap("kafka")).use { client ->
+            client.partitionsFor(topic)
+                .map { partInfo -> TopicPartition(partInfo.topic(), partInfo.partition()) }
+                .toList()
+                .also(client::assign)
+                .also(client::seekToBeginning)
+                .onEach { client.position(it) }
+                .forEach { _ -> client.commitSync(Duration.ofMinutes(1)) }
+        }
     }
 }

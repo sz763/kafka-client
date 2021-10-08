@@ -19,6 +19,7 @@ class DarkLafThemService(private val config: Config) : ThemeService {
         Pair("High Contrast Light") { SolarizedLightTheme() },
     )
 
+//    @PostConstruct
     override fun initDefaultTheme() {
         setTheme(config.defaultTheme())
     }

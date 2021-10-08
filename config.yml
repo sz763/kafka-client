@@ -1,11 +1,9 @@
 theme: Darcula
 kafka:
   group.id: kafka_tool_qa
-  application.id: kafka_tool_qa1
+  application.id: kafka_tool_qa
   enable.auto.commit: false
   auto.offset.reset: earliest
   bootstrap.servers: "localhost:9092"
-  default.key.desr: org.apache.kafka.common.serialization.Serdes$StringSerde
-  default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
   key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
   value.deserializer: org.apache.kafka.common.serialization.StringDeserializer

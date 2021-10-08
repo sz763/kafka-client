@@ -5,4 +5,5 @@ interface Config {
     fun save()
     fun defaultTheme(): String
     fun asMap(key: String, vararg keys: String): Map<String, Any>
+    fun resetToBeginningAtShutdown(): Boolean
 }

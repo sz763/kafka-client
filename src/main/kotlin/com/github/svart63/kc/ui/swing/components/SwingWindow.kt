@@ -17,10 +17,10 @@ import javax.swing.border.EmptyBorder
 
 @Component
 class SwingWindow @Autowired constructor(
+    private val themeService: ThemeService,
     private val topicPanel: TopicPanel,
     private val contentPanel: ContentPanel,
     private val config: Config,
-    private val themeService: ThemeService,
 ) : MainWindow {
     private val mainFrame = JFrame("Kafka-Client")
     private val mainContainer = JPanel()
@@ -33,7 +33,7 @@ class SwingWindow @Autowired constructor(
     }
 
     @PostConstruct
-    fun show() {
+    override fun show() {
         mainFrame.pack()
         mainFrame.setLocationRelativeTo(null)
         themeService.initDefaultTheme()
