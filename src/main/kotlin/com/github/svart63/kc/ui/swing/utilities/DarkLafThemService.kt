@@ -18,7 +18,7 @@ class DarkLafThemService(private val config: Config) : ThemeService {
         Pair("High Contrast Light") { HighContrastLightTheme() },
     )
 
-    override fun themes(): List<String> = themes.keys.toList().sortedDescending()
+    override fun themes(): List<String> = themes.keys.toList().sorted()
 
     override fun setTheme(name: String) {
         setThemeByName(name)
