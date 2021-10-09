@@ -1,4 +1,5 @@
 # kafka-client
+Simple kafka client for monitoring topic values.
 ## How to use
 - specify kafka hosts in config.yml like <code>host:port,host2:port2</code>
 - start java app
