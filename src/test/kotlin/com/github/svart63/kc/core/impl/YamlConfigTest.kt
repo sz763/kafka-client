@@ -18,6 +18,6 @@ internal class YamlConfigTest @Autowired constructor(private val config: Config)
     @Test
     internal fun testGetKafkaConfig() {
         val map = config.asMap("kafka")
-        assertEquals("latest", map["auto.offset.reset"])
+        assertEquals("qa_kafka_client", map["application.id"])
     }
 }

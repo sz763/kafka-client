@@ -3,6 +3,7 @@ package com.github.svart63.kc.core.impl
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.github.svart63.kc.core.Config
 import org.springframework.stereotype.Component
@@ -16,17 +17,20 @@ class YamlConfig : Config {
     private val typeRef = object : TypeReference<Map<String, Any>>() {}
 
     private val mapper = ObjectMapper(YAMLFactory())
-    private lateinit var tree: JsonNode
+    private lateinit var tree: ObjectNode
 
     @PostConstruct
     override fun load() {
-        tree = mapper.readTree(File(configName))
+        tree = mapper.readValue(File(configName), ObjectNode::class.java)
     }
 
     override fun save() {
         FileOutputStream(configName).use {
             mapper.writeValue(it, tree)
         }
+    }
+    override fun updateTheme(name: String) {
+        tree.put("theme", name)
     }
 
     override fun defaultTheme(): String = tree.get("theme").textValue()

@@ -7,7 +7,6 @@ import com.github.svart63.kc.core.impl.ContainsDataFilter
 import com.github.svart63.kc.core.impl.NoopDataFilter
 import com.github.svart63.kc.ui.ContentPanel
 import com.github.svart63.kc.ui.PreviewService
-import com.github.svart63.kc.ui.swing.SwingPanel
 import com.github.svart63.kc.ui.swing.utilities.KeyPressed
 import com.github.svart63.kc.ui.swing.utilities.MousePressed
 import com.github.svart63.kc.ui.swing.utilities.NotEditableTableModel
@@ -19,7 +18,7 @@ import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
 import java.awt.event.KeyEvent
 import java.awt.event.MouseEvent.BUTTON2
-import java.util.*
+import java.util.Vector
 import javax.swing.*
 
 private const val KEY_HEADER = "Key"

@@ -1,4 +1,4 @@
-package com.github.svart63.kc.ui.swing
+package com.github.svart63.kc.ui.swing.components
 
 import com.github.weisj.darklaf.components.border.DarkBorders
 import java.awt.BorderLayout

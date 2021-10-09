@@ -1,4 +1,4 @@
-package com.github.svart63.kc.ui.swing
+package com.github.svart63.kc.ui.swing.components
 
 import com.github.svart63.kc.core.Config
 import com.github.svart63.kc.ui.ContentPanel
@@ -66,7 +66,7 @@ class SwingWindow @Autowired constructor(
     private fun settingsMenu() {
         val menu = JMenu("Settings")
         val item = JMenuItem("Save")
-        item.addMouseListener(MousePressed { config::save })
+        item.addMouseListener(MousePressed { config.save() })
         menu.add(item)
         mainFrame.jMenuBar.add(menu)
     }
