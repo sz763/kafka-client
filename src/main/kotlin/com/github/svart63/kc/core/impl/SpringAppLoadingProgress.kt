@@ -18,6 +18,7 @@ class SpringAppLoadingProgress @Autowired constructor(
 ) :
     ApplicationListener<ContextRefreshedEvent>, LoadingProgress, BeanPostProcessor {
     init {
+        themeService.initDefaultTheme()
         splashScreen.progressMaxValue(applicationContext.beanDefinitionCount)
         splashScreen.showSplashScreen()
     }

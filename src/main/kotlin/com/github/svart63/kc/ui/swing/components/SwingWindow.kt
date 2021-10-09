@@ -7,11 +7,12 @@ import com.github.svart63.kc.ui.ThemeService
 import com.github.svart63.kc.ui.TopicPanel
 import com.github.svart63.kc.ui.swing.utilities.MousePressed
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationListener
+import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.stereotype.Component
 import java.awt.BorderLayout
 import java.awt.Container
 import java.awt.Dimension
-import javax.annotation.PostConstruct
 import javax.swing.*
 import javax.swing.border.EmptyBorder
 
@@ -21,7 +22,7 @@ class SwingWindow @Autowired constructor(
     private val topicPanel: TopicPanel,
     private val contentPanel: ContentPanel,
     private val config: Config,
-) : MainWindow {
+) : MainWindow, ApplicationListener<ContextRefreshedEvent> {
     private val mainFrame = JFrame("Kafka-Client")
     private val mainContainer = JPanel()
 
@@ -32,11 +33,9 @@ class SwingWindow @Autowired constructor(
         addPanels()
     }
 
-    @PostConstruct
     override fun show() {
         mainFrame.pack()
         mainFrame.setLocationRelativeTo(null)
-        themeService.initDefaultTheme()
         mainFrame.isVisible = true
     }
 
@@ -79,5 +78,9 @@ class SwingWindow @Autowired constructor(
             menu.add(item)
             item.addMouseListener(MousePressed { themeService.setTheme(name) })
         }
+    }
+
+    override fun onApplicationEvent(event: ContextRefreshedEvent) {
+        show()
     }
 }

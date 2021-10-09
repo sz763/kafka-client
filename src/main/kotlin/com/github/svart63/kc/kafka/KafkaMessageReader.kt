@@ -13,7 +13,7 @@ import org.springframework.beans.factory.DisposableBean
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.Duration
-import java.util.*
+import java.util.Properties
 
 @Service
 class KafkaMessageReader @Autowired constructor(

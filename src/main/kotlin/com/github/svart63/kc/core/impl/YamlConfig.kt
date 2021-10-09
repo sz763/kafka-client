@@ -1,7 +1,6 @@
 package com.github.svart63.kc.core.impl
 
 import com.fasterxml.jackson.core.type.TypeReference
-import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
@@ -29,6 +28,7 @@ class YamlConfig : Config {
             mapper.writeValue(it, tree)
         }
     }
+
     override fun updateTheme(name: String) {
         tree.put("theme", name)
     }

@@ -3,7 +3,7 @@ package com.github.svart63.kc.core.impl
 import com.github.svart63.kc.core.DataFilter
 import com.github.svart63.kc.core.DataHandler
 import com.github.svart63.kc.core.TableDataHandler
-import java.util.*
+import java.util.Vector
 
 class ListDataHandler : DataHandler<List<String>, String, String> {
     private var data: List<String> = mutableListOf()

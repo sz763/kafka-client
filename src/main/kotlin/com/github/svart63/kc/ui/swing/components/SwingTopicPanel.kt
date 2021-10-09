@@ -15,7 +15,10 @@ import org.springframework.stereotype.Component
 import java.awt.BorderLayout
 import java.awt.Font
 import java.awt.event.KeyEvent
-import javax.swing.*
+import javax.swing.JLabel
+import javax.swing.JList
+import javax.swing.JOptionPane
+import javax.swing.JScrollPane
 
 @Component
 class SwingTopicPanel @Autowired constructor(

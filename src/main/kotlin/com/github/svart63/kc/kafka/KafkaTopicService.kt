@@ -7,7 +7,6 @@ import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.springframework.beans.factory.InitializingBean
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import kotlin.system.exitProcess
 
 @Service
 class KafkaTopicService @Autowired constructor(

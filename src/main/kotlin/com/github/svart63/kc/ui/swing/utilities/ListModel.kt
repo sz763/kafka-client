@@ -2,7 +2,6 @@ package com.github.svart63.kc.ui.swing.utilities
 
 import java.util.Vector
 import javax.swing.AbstractListModel
-import javax.swing.DefaultListModel
 
 class ListModel<T> : AbstractListModel<T>() {
 
