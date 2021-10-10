@@ -2,10 +2,12 @@
 
 Simple kafka client for monitoring topic values.
 
+<!--
 ![main_window](https://user-images.githubusercontent.com/5479948/136686116-e49a3249-7f31-4f08-be06-0e010e578c03.png)
 ![view](https://user-images.githubusercontent.com/5479948/136686118-3c34660c-7628-4d55-9415-11cdd42320cf.png)
 ![preview](https://user-images.githubusercontent.com/5479948/136686119-436d6863-5dea-4fc0-bee1-44bbef42c5de.png)
-
+-->
+<img src="https://user-images.githubusercontent.com/5479948/136686118-3c34660c-7628-4d55-9415-11cdd42320cf.png" width="610" height="414">
 
 ## How to start
 
