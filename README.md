@@ -1,12 +1,12 @@
 # kafka-client
 Simple kafka client for monitoring topic values.
+## How to start
+<code>$ java -jar kafka-client-1.0.jar</code>
 ## How to use
 - specify kafka hosts in config.yml like <code>host:port,host2:port2</code>
 - start java app
 - select topic in topic list
 - click twice at topic name in topic list
-## How to start
-<code>$ java -jar kafka-client-1.0.jar</code>
 ## Actions
 ### Filering topics
 - for filtering topics - click to topic list and press <code>ctrl + f</code>
