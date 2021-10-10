@@ -83,6 +83,7 @@ class SwingTopicPanel @Autowired constructor(
         dataHandler.addValue(name)
         if (filter.test(name)) {
             topicModel.addElement(name)
+            topicModel.sort()
         }
     }
 

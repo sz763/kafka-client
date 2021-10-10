@@ -3,7 +3,7 @@ package com.github.svart63.kc.ui.swing.utilities
 import java.util.Vector
 import javax.swing.AbstractListModel
 
-class ListModel<T> : AbstractListModel<T>() {
+class ListModel<T : Comparable<T>> : AbstractListModel<T>() {
 
     private val data = Vector<T>()
 
@@ -19,4 +19,5 @@ class ListModel<T> : AbstractListModel<T>() {
     }
 
     fun clear() = data.clear()
+    fun sort() = data.sort()
 }
