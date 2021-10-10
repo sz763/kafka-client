@@ -13,7 +13,12 @@ import org.springframework.stereotype.Component
 import java.awt.BorderLayout
 import java.awt.Container
 import java.awt.Dimension
-import javax.swing.*
+import javax.swing.JFrame
+import javax.swing.JMenu
+import javax.swing.JMenuBar
+import javax.swing.JMenuItem
+import javax.swing.JPanel
+import javax.swing.JSplitPane
 import javax.swing.border.EmptyBorder
 
 @Component

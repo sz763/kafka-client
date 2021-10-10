@@ -19,7 +19,12 @@ import java.awt.datatransfer.StringSelection
 import java.awt.event.KeyEvent
 import java.awt.event.MouseEvent.BUTTON2
 import java.util.Vector
-import javax.swing.*
+import javax.swing.JLabel
+import javax.swing.JMenuItem
+import javax.swing.JOptionPane
+import javax.swing.JPopupMenu
+import javax.swing.JScrollPane
+import javax.swing.JTable
 
 private const val KEY_HEADER = "Key"
 private const val VALUE_HEADER = "Value"

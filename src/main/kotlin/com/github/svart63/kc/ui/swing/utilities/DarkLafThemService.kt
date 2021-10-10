@@ -3,7 +3,13 @@ package com.github.svart63.kc.ui.swing.utilities
 import com.github.svart63.kc.core.Config
 import com.github.svart63.kc.ui.ThemeService
 import com.github.weisj.darklaf.LafManager
-import com.github.weisj.darklaf.theme.*
+import com.github.weisj.darklaf.theme.DarculaTheme
+import com.github.weisj.darklaf.theme.HighContrastDarkTheme
+import com.github.weisj.darklaf.theme.HighContrastLightTheme
+import com.github.weisj.darklaf.theme.IntelliJTheme
+import com.github.weisj.darklaf.theme.OneDarkTheme
+import com.github.weisj.darklaf.theme.SolarizedDarkTheme
+import com.github.weisj.darklaf.theme.SolarizedLightTheme
 import org.springframework.stereotype.Component
 
 @Component

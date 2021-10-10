@@ -19,5 +19,6 @@ class ListModel<T : Comparable<T>> : AbstractListModel<T>() {
     }
 
     fun clear() = data.clear()
+
     fun sort() = data.sort()
 }
