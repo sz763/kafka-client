@@ -25,7 +25,6 @@ class KafkaTopicService @Autowired constructor(
                 "Error occurred during getting topic names: ${e.message},\n\n" +
                         "Check more details in log file."
             )
-//            exitProcess(1)
         }
     }
 }

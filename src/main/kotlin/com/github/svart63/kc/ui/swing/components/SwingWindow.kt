@@ -27,8 +27,8 @@ class SwingWindow @Autowired constructor(
     private val topicPanel: TopicPanel,
     private val contentPanel: ContentPanel,
     private val config: Config,
+    private val mainFrame: JFrame
 ) : MainWindow, ApplicationListener<ContextRefreshedEvent> {
-    private val mainFrame = JFrame("Kafka-Client")
     private val mainContainer = JPanel()
 
 

@@ -7,7 +7,8 @@ import com.github.svart63.kc.core.impl.VectorDataHandler
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import java.util.Vector
+import java.util.*
+import javax.swing.JFrame
 
 @Configuration
 class AppConfiguration {
@@ -22,4 +23,7 @@ class AppConfiguration {
     fun topicDataHandler(): DataHandler<List<String>, String, String> {
         return ListDataHandler()
     }
+
+    @Bean
+    fun mainFrame(): JFrame = JFrame("Kafka-Client")
 }
