@@ -41,5 +41,5 @@ class YamlConfig : Config {
         return mapper.convertValue(node, typeRef)
     }
 
-    override fun resetToBeginningAtShutdown(): Boolean = tree.get("stream").get("reset_at_shutdown").asBoolean()
+    override fun readFromBeginning(): Boolean = tree.get("stream").get("read.from.beginning").asBoolean()
 }

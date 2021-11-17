@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.net.InetAddress
 import java.time.Duration
 import java.util.Properties
 
@@ -33,11 +34,13 @@ class KafkaMessageReader @Autowired constructor(
         if (topic == topicName) {
             return
         }
-        topicName = topic
         if (isRunning) {
             stop()
         }
-
+        topicName = topic
+        if (config.readFromBeginning()) {
+            resetToBeginning(topicName)
+        }
         val props = Properties()
         config.asMap("kafka").forEach(props::put)
         val builder = StreamsBuilder()
@@ -56,10 +59,10 @@ class KafkaMessageReader @Autowired constructor(
 
     private fun stop() {
         log.info("Stop reading topic: $topicName")
+        streams.removeStreamThread()
         streams.close(Duration.ofSeconds(10))
         streams.cleanUp()
         isRunning = false
-        resetToBeginning(topicName)
     }
 
     override fun destroy() {
@@ -67,14 +70,24 @@ class KafkaMessageReader @Autowired constructor(
     }
 
     private fun resetToBeginning(topic: String) {
-        KafkaConsumer<Any, Any>(config.asMap("kafka")).use { client ->
-            client.partitionsFor(topic)
-                .map { partInfo -> TopicPartition(partInfo.topic(), partInfo.partition()) }
-                .toList()
-                .also(client::assign)
-                .also(client::seekToBeginning)
-                .onEach { client.position(it) }
-                .forEach { _ -> client.commitSync(Duration.ofMinutes(1)) }
+        val configs = config.asMap("kafka")
+        KafkaConsumer<Any, Any>(configs).use { client ->
+            resetTopicOffset(client, topic)
         }
+    }
+
+    internal fun resetTopicOffset(
+        client: KafkaConsumer<Any, Any>,
+        topic: String
+    ) {
+        val partition = client.partitionsFor(topic)
+            .map { partInfo -> TopicPartition(partInfo.topic(), partInfo.partition()) }
+            .toList()
+            .also(client::assign)
+            .filter { client.position(it) > 0 }
+            .also(client::seekToBeginning)
+            .onEach { log.info("For topic '$topicName' position has been reset to: ${client.position(it)}") }
+            .firstOrNull()
+        partition?.let { client.commitSync() }
     }
 }

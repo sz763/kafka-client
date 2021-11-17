@@ -6,5 +6,5 @@ interface Config {
     fun defaultTheme(): String
     fun updateTheme(name: String)
     fun asMap(key: String, vararg keys: String): Map<String, Any>
-    fun resetToBeginningAtShutdown(): Boolean
+    fun readFromBeginning(): Boolean
 }

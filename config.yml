@@ -1,5 +1,7 @@
 ---
 theme: "Darcula"
+stream:
+  read.from.beginning: true
 kafka:
   group.id: "qa_kafka_client"
   application.id: "qa_kafka_client"

@@ -5,6 +5,7 @@ import com.github.svart63.kc.core.DataHandler
 import com.github.svart63.kc.core.impl.ContainsDataFilter
 import com.github.svart63.kc.core.impl.NoopDataFilter
 import com.github.svart63.kc.kafka.KafkaMessageReader
+import com.github.svart63.kc.ui.ContentPanel
 import com.github.svart63.kc.ui.TopicPanel
 import com.github.svart63.kc.ui.swing.utilities.KeyPressed
 import com.github.svart63.kc.ui.swing.utilities.ListModel
@@ -23,7 +24,8 @@ import javax.swing.JScrollPane
 @Component
 class SwingTopicPanel @Autowired constructor(
     private val dataHandler: DataHandler<List<String>, String, String>,
-    private val kafkaMessageReader: KafkaMessageReader
+    private val kafkaMessageReader: KafkaMessageReader,
+    private val contentPanel: ContentPanel
 ) : TopicPanel, SwingPanel("Topics") {
     private val topicModel = ListModel<String>()
     private val topicList = JList(topicModel)
@@ -62,6 +64,7 @@ class SwingTopicPanel @Autowired constructor(
         })
         topicList.addMouseListener(MousePressed { e ->
             if (e.clickCount == 2) {
+                contentPanel.clear()
                 kafkaMessageReader.start(topicList.selectedValue)
             }
         })

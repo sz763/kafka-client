@@ -119,8 +119,7 @@ class SwingContentPanel @Autowired constructor(
                 JOptionPane.OK_CANCEL_OPTION
             )
             if (dialog == 0) {
-                dataHandler.clear()
-                tableModel.clear()
+                clear()
             }
         })
         val spacer = JMenuItem(" ")
@@ -190,6 +189,12 @@ class SwingContentPanel @Autowired constructor(
             dataHandler.addValue(data)
             tableModel.addRow(data)
         }
+    }
+
+    override fun clear() {
+        dataHandler.clear()
+        tableModel.clear()
+        this.repaint()
     }
 
     private fun vectorOf(key: String, value: String): Vector<String> {
