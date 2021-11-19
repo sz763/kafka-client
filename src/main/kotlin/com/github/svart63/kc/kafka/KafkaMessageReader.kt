@@ -2,24 +2,27 @@ package com.github.svart63.kc.kafka
 
 import com.github.svart63.kc.core.Config
 import com.github.svart63.kc.core.EventBroker
+import com.github.svart63.kc.core.impl.RecordTimeBasedEvent
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.common.TopicPartition
 import org.apache.kafka.streams.KafkaStreams
 import org.apache.kafka.streams.KeyValue
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.errors.StreamsUncaughtExceptionHandler
+import org.apache.kafka.streams.kstream.Consumed
+import org.apache.kafka.streams.processor.LogAndSkipOnInvalidTimestamp
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.net.InetAddress
 import java.time.Duration
-import java.util.Properties
+import java.util.*
 
 @Service
 class KafkaMessageReader @Autowired constructor(
     private val eventBroker: EventBroker,
-    private val config: Config
+    private val config: Config,
+    private val serdeProvider: SerdeProvider
 ) : DisposableBean {
     private lateinit var streams: KafkaStreams
     private val log = LoggerFactory.getLogger(this::class.java)
@@ -44,10 +47,7 @@ class KafkaMessageReader @Autowired constructor(
         val props = Properties()
         config.asMap("kafka").forEach(props::put)
         val builder = StreamsBuilder()
-        builder.stream<ByteArray, ByteArray>(topic)
-            .map { k: ByteArray?, v: ByteArray? -> KeyValue(stringOf(k), stringOf(v)) }
-            .peek { key, value -> log.info("Received: key={}, value={}", key, value) }
-            .foreach { k, v -> eventBroker.pushEvent(Pair(k, v)) }
+        initStream(builder, topic)
         streams = KafkaStreams(builder.build(), props)
         streams.setUncaughtExceptionHandler(exceptionHandler)
         log.info("Start reading topic: $topic")
@@ -55,7 +55,16 @@ class KafkaMessageReader @Autowired constructor(
         isRunning = true
     }
 
-    private fun stringOf(array: ByteArray?): String = array?.let(::String) ?: ""
+    internal fun initStream(builder: StreamsBuilder, topic: String) {
+        val timeExtractor = LogAndSkipOnInvalidTimestamp()
+        val transformerSupplier = KafkaClientTransformerSupplier(serdeProvider.transformer())
+        val consumed = Consumed.with(serdeProvider.keySerde(), serdeProvider.valueSerde())
+            .withTimestampExtractor(timeExtractor)
+        builder.stream(topic, consumed)
+            .transform(transformerSupplier)
+            .peek { key, value -> log.info("Received: key={}, value={}", key, value) }
+            .foreach { k, v -> eventBroker.pushEvent(RecordTimeBasedEvent(k, v.first, v.second)) }
+    }
 
     private fun stop() {
         log.info("Stop reading topic: $topicName")

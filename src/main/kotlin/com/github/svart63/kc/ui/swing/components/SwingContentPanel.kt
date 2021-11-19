@@ -7,6 +7,7 @@ import com.github.svart63.kc.core.impl.ContainsDataFilter
 import com.github.svart63.kc.core.impl.NoopDataFilter
 import com.github.svart63.kc.ui.ContentPanel
 import com.github.svart63.kc.ui.PreviewService
+import com.github.svart63.kc.ui.swing.utilities.DateTimeConverterService
 import com.github.svart63.kc.ui.swing.utilities.KeyPressed
 import com.github.svart63.kc.ui.swing.utilities.MousePressed
 import com.github.svart63.kc.ui.swing.utilities.NotEditableTableModel
@@ -18,14 +19,10 @@ import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
 import java.awt.event.KeyEvent
 import java.awt.event.MouseEvent.BUTTON2
-import java.util.Vector
-import javax.swing.JLabel
-import javax.swing.JMenuItem
-import javax.swing.JOptionPane
-import javax.swing.JPopupMenu
-import javax.swing.JScrollPane
-import javax.swing.JTable
+import java.util.*
+import javax.swing.*
 
+private const val TIMESTAMP_HEADER = "Timestamp"
 private const val KEY_HEADER = "Key"
 private const val VALUE_HEADER = "Value"
 
@@ -34,7 +31,8 @@ class SwingContentPanel @Autowired constructor(
     @Qualifier("data_handler_table")
     private val dataHandler: TableDataHandler<Vector<Vector<String>>, String, Vector<String>>,
     private val preview: PreviewService,
-    private val formatter: TextFormatterService
+    private val formatter: TextFormatterService,
+    private val dateTimeService: DateTimeConverterService
 ) : ContentPanel, SwingPanel("Events") {
 
     private val tableModel = NotEditableTableModel()
@@ -66,6 +64,7 @@ class SwingContentPanel @Autowired constructor(
     }
 
     private fun initTable() {
+        tableModel.addColumn(TIMESTAMP_HEADER)
         tableModel.addColumn(KEY_HEADER)
         tableModel.addColumn(VALUE_HEADER)
         val keyColumn = table.getColumn(KEY_HEADER)
@@ -92,8 +91,10 @@ class SwingContentPanel @Autowired constructor(
         })
         table.addMouseListener(MousePressed { e ->
             if (e.clickCount == 2) {
-                preview.show(table.getValueAt(table.selectedRow, 0) as String,
-                    table.getValueAt(table.selectedRow, table.selectedColumn) as String)
+                preview.show(
+                    table.getValueAt(table.selectedRow, 0) as String,
+                    table.getValueAt(table.selectedRow, table.selectedColumn) as String
+                )
             }
             if (e.button == BUTTON2) {
                 copyCellValue()
@@ -183,9 +184,9 @@ class SwingContentPanel @Autowired constructor(
         list.forEach(tableModel::addRow)
     }
 
-    override fun addValue(key: String, value: String) {
+    override fun addValue(timestamp: Long, key: String, value: String) {
         if (keyFilter.test(key) && valueFilter.test(value)) {
-            val data = vectorOf(key, value)
+            val data = vectorOf(dateTimeService.convert(timestamp), key, value)
             dataHandler.addValue(data)
             tableModel.addRow(data)
         }
@@ -197,8 +198,9 @@ class SwingContentPanel @Autowired constructor(
         this.repaint()
     }
 
-    private fun vectorOf(key: String, value: String): Vector<String> {
+    private fun vectorOf(dateTime: String, key: String, value: String): Vector<String> {
         val v = Vector<String>()
+        v.add(dateTime)
         v.add(key)
         v.add(value)
         return v

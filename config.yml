@@ -2,6 +2,15 @@
 theme: "Darcula"
 stream:
   read.from.beginning: true
+  serde.packages:
+    - "org.apache.kafka.common.serialization"
+    - "com.github.svart63.kc.kafka"
+  serde.key: "ByteArraySerde"
+  serde.value: "ByteArraySerde"
+  serde.transformer: "com.github.svart63.kc.kafka.StringTransformer"
+table:
+  date.format: "yyyy-MM-dd hh:ss:mm.SSSS"
+  time.zone:
 kafka:
   group.id: "qa_kafka_client"
   application.id: "qa_kafka_client"

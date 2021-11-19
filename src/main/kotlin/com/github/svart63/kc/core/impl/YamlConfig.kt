@@ -8,6 +8,7 @@ import com.github.svart63.kc.core.Config
 import org.springframework.stereotype.Component
 import java.io.File
 import java.io.FileOutputStream
+import java.time.ZoneId
 import javax.annotation.PostConstruct
 
 @Component
@@ -42,4 +43,21 @@ class YamlConfig : Config {
     }
 
     override fun readFromBeginning(): Boolean = tree.get("stream").get("read.from.beginning").asBoolean()
+
+    override fun keySerde(): String = tree.get("stream").get("serde.key").asText()
+
+    override fun valueSerde(): String = tree.get("stream").get("serde.value").asText()
+
+    override fun serdePackages(): Array<String> {
+        return tree.get("stream").get("serde.packages").map { it.asText() }.toTypedArray()
+    }
+
+    override fun serdeTransformer(): String = tree.get("stream").get("serde.transformer").asText()
+    override fun dateTimeFormat(): String = tree.get("table")
+        .get("date.format")
+        .asText("yyyy-MM-dd hh:mm:ss.SSSS")
+
+    override fun timeZoneId(): String = tree.get("table")
+        .get("time.zone")
+        .asText(ZoneId.systemDefault().id)
 }
