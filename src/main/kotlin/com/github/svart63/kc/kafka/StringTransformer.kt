@@ -5,6 +5,7 @@ class StringTransformer : KafkaTimeBasedTransformer() {
     private fun stringOf(data: Any?): String {
         return when (data) {
             null -> ""
+            is String -> data
             is ByteArray -> String(data)
             else -> data.toString()
         }

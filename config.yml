@@ -17,5 +17,3 @@ kafka:
   bootstrap.servers: "localhost:9092"
   key.deserializer: "org.apache.kafka.common.serialization.StringDeserializer"
   value.deserializer: "org.apache.kafka.common.serialization.StringDeserializer"
-  application.id: "kc_b281daa5-727a-4a9b-9ed4-3cb81d727b0c"
-  group.id: "kc_b281daa5-727a-4a9b-9ed4-3cb81d727b0c"

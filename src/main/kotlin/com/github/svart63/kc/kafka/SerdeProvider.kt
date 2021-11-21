@@ -42,12 +42,12 @@ class SerdeProvider @Autowired constructor(private val config: Config) : Initial
 
     private fun initTransformers(reflections: Reflections) {
         val transformers = subtypesWithDefaultConstructors(reflections, KafkaTimeBasedTransformer::class.java)
-        this.transformers = transformers.associate { Pair(it.name, it.newInstance()) }
+        this.transformers = transformers.associate { Pair(it.name, it.getDeclaredConstructor().newInstance()) }
     }
 
     private fun initSerdes(reflections: Reflections) {
         val serdes = subtypesWithDefaultConstructors(reflections, Serde::class.java)
-        this.serdes = serdes.associate { Pair(it.simpleName, it.newInstance()) }
+        this.serdes = serdes.associate { Pair(it.simpleName, it.getDeclaredConstructor().newInstance()) }
     }
 
     private fun <T> subtypesWithDefaultConstructors(reflections: Reflections, clazz: Class<T>) =

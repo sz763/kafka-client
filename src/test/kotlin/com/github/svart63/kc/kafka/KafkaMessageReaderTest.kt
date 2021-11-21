@@ -13,7 +13,7 @@ import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.TopologyTestDriver
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.util.*
+import java.util.Properties
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -35,6 +35,19 @@ internal class KafkaMessageReaderTest {
         props[StreamsConfig.APPLICATION_ID_CONFIG] = "test"
         props[StreamsConfig.BOOTSTRAP_SERVERS_CONFIG] = "dummy:1234"
         every { broker.pushEvent(capture(slot)) }.answers { }
+        every { serdeProvider.transformer() }.returns(object : KafkaTimeBasedTransformer() {
+            override fun convertKey(key: Any?): String = valueOf(key)
+            override fun convertValue(value: Any?): String = valueOf(value)
+            private fun valueOf(value: Any?): String {
+                return when (value) {
+                    null -> ""
+                    is String -> value
+                    is ByteArray -> String(value)
+                    else -> value.toString()
+                }
+
+            }
+        })
     }
 
     private val topicName = "test_topic"
@@ -42,6 +55,8 @@ internal class KafkaMessageReaderTest {
     @Test
     internal fun testStreamBuilder() {
         every { broker.pushEvent(capture(slot)) }.answers { }
+        every { serdeProvider.keySerde() }.returns(Serdes.String())
+        every { serdeProvider.valueSerde() }.returns(Serdes.String())
         reader.initStream(builder, topicName)
         val testDriver = TopologyTestDriver(builder.build(), props)
         val topic = testDriver.createInputTopic(topicName, stringSerializer, stringSerializer)
@@ -55,6 +70,8 @@ internal class KafkaMessageReaderTest {
 
     @Test
     internal fun testStreamByteArray() {
+        every { serdeProvider.keySerde() }.returns(Serdes.String())
+        every { serdeProvider.valueSerde() }.returns(Serdes.String())
         reader.initStream(builder, topicName)
         val testDriver = TopologyTestDriver(builder.build(), props)
         val topic = testDriver.createInputTopic(topicName, stringSerializer, byteArraySerializer)
@@ -68,6 +85,8 @@ internal class KafkaMessageReaderTest {
 
     @Test
     internal fun testStreamKeyIsLong() {
+        every { serdeProvider.keySerde() }.returns(Serdes.Long())
+        every { serdeProvider.valueSerde() }.returns(Serdes.ByteArray())
         reader.initStream(builder, topicName)
         val testDriver = TopologyTestDriver(builder.build(), props)
         val topic = testDriver.createInputTopic(topicName, longSerializer, byteArraySerializer)

@@ -1,6 +1,7 @@
 package com.github.svart63.kc.core.impl
 
 import com.github.svart63.kc.core.Config
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -18,6 +19,6 @@ internal class YamlConfigTest @Autowired constructor(private val config: Config)
     @Test
     internal fun testGetKafkaConfig() {
         val map = config.asMap("kafka")
-        assertEquals("qa_kafka_client", map["application.id"])
+        assertThat(map).containsKey("enable.auto.commit")
     }
 }
