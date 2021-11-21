@@ -79,7 +79,7 @@ class KafkaMessageReader @Autowired constructor(
     }
 
     private fun resetToBeginning(topic: String) {
-        val configs = config.asMap("kafka")
+        val configs = config.kafkaConfig()
         KafkaConsumer<Any, Any>(configs).use { client ->
             resetTopicOffset(client, topic)
         }

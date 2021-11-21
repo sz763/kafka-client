@@ -13,4 +13,5 @@ interface Config {
     fun serdeTransformer(): String
     fun dateTimeFormat(): String
     fun timeZoneId(): String
+    fun kafkaConfig(): Map<String, Any>
 }

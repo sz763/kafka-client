@@ -9,15 +9,17 @@ import org.springframework.stereotype.Component
 import java.io.File
 import java.io.FileOutputStream
 import java.time.ZoneId
+import java.util.*
 import javax.annotation.PostConstruct
 
 @Component
 class YamlConfig : Config {
     private val configName = "./config.yml"
     private val typeRef = object : TypeReference<Map<String, Any>>() {}
-
     private val mapper = ObjectMapper(YAMLFactory())
     private lateinit var tree: ObjectNode
+    private val appIdentifier: String by lazy { "kc_${UUID.randomUUID()}" }
+
 
     @PostConstruct
     override fun load() {
@@ -60,4 +62,19 @@ class YamlConfig : Config {
     override fun timeZoneId(): String = tree.get("table")
         .get("time.zone")
         .asText(ZoneId.systemDefault().id)
+
+    override fun kafkaConfig(): Map<String, Any> {
+        val shallAddGroupId = !this.tree.with("kafka").has("group.id")
+        val shallAddAppId = !this.tree.with("kafka").has("application.id")
+        if (shallAddAppId) {
+            this.tree.with("kafka").put("application.id", appIdentifier)
+        }
+        if (shallAddGroupId) {
+            this.tree.with("kafka").put("group.id", appIdentifier)
+        }
+        if (shallAddGroupId || shallAddAppId) {
+            save()
+        }
+        return asMap("kafka")
+    }
 }

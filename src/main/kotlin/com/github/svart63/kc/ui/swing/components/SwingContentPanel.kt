@@ -67,10 +67,8 @@ class SwingContentPanel @Autowired constructor(
         tableModel.addColumn(TIMESTAMP_HEADER)
         tableModel.addColumn(KEY_HEADER)
         tableModel.addColumn(VALUE_HEADER)
-        val keyColumn = table.getColumn(KEY_HEADER)
-        keyColumn.preferredWidth = 300
-        keyColumn.minWidth = 100
-        keyColumn.maxWidth = 300
+        setColumnPreferredSize(TIMESTAMP_HEADER, 150, 100, 200)
+        setColumnPreferredSize(KEY_HEADER, 300, 100, 300)
         table.addKeyListener(KeyPressed { e ->
             if (e.isControlDown && e.isShiftDown && e.keyCode == KeyEvent.VK_F) {
                 handleKeyFilter()
@@ -105,6 +103,13 @@ class SwingContentPanel @Autowired constructor(
         })
         tableModel.values(dataHandler.values())
         initTablePopup()
+    }
+
+    private fun setColumnPreferredSize(colName: String, preferredSize: Int, minWidth: Int, maxWidth: Int) {
+        val keyColumn = table.getColumn(colName)
+        keyColumn.preferredWidth = preferredSize
+        keyColumn.minWidth = minWidth
+        keyColumn.maxWidth = maxWidth
     }
 
     private fun initTablePopup() {
