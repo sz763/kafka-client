@@ -114,8 +114,8 @@ class SwingTopicPanel @Autowired constructor(
             }
             if (e.button == BUTTON3) {
                 val topicName = topicList.selectedValue
-                val message = "Would you like add topic '${topicName}' to favourite?"
-                val dialog = JOptionPane.showConfirmDialog(this.parent, message, "Add topic to favorite", YES_NO_OPTION)
+                val message = "Would you like to add topic '${topicName}' to favourite list?"
+                val dialog = JOptionPane.showConfirmDialog(this.parent, message, "Add topic to favorite list", YES_NO_OPTION)
                 if (dialog == 0) {
                     favoriteTopics.add(topicName)
                     favoriteTopics.save()

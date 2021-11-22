@@ -1,1 +1,1 @@
-java -jar kafka-client-1.0.jar
+java -jar kafka-client-1.1.0.jar

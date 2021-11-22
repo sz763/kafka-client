@@ -53,12 +53,12 @@ class SwingPreview @Autowired constructor(
     }
 
     private fun initJframe(title: String, container: JScrollPane, menu: JMenu) {
-        val frame = JFrame("Preview of $title")
+        val frame = JFrame("Preview of '$title'")
         frame.layout = BorderLayout()
         frame.add(container, CENTER)
         frame.jMenuBar = JMenuBar()
         frame.jMenuBar.add(menu)
-        frame.preferredSize = Dimension(768, 786)
+        frame.preferredSize = Dimension(768, 768)
         frame.pack()
         frame.setLocationRelativeTo(mainFrame)
         frame.isVisible = true

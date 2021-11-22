@@ -90,7 +90,7 @@ class SwingContentPanel @Autowired constructor(
         table.addMouseListener(MousePressed { e ->
             if (e.clickCount == 2) {
                 preview.show(
-                    table.getValueAt(table.selectedRow, 0) as String,
+                    table.getValueAt(table.selectedRow, table.getColumn(KEY_HEADER).modelIndex) as String,
                     table.getValueAt(table.selectedRow, table.selectedColumn) as String
                 )
             }

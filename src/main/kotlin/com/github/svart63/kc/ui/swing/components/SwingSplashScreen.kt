@@ -23,6 +23,7 @@ class SwingSplashScreen : JFrame(), SplashScreen {
         this.isUndecorated = true
         this.add(container, BorderLayout.CENTER)
         this.preferredSize = Dimension(300, 100)
+        this.defaultCloseOperation = EXIT_ON_CLOSE
         this.pack()
     }
 

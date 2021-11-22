@@ -6,6 +6,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.github.svart63.kc.core.FavoriteTopics
 import org.springframework.beans.factory.InitializingBean
 import org.springframework.stereotype.Component
+import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.util.*
@@ -31,8 +32,11 @@ class FileStorageFavoriteTopic : FavoriteTopics, InitializingBean {
 
     override fun topics(): Collection<String> = Collections.unmodifiableCollection(topics)
     override fun load() {
-        FileInputStream(fileStorage).use {
-            topics.addAll(mapper.readValue(it, object : TypeReference<MutableList<String>>() {}))
+        val file = File(fileStorage)
+        if (file.exists()) {
+            FileInputStream(file).use {
+                topics.addAll(mapper.readValue(it, object : TypeReference<MutableList<String>>() {}))
+            }
         }
     }
 
