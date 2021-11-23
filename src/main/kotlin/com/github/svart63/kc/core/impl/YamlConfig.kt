@@ -13,8 +13,9 @@ import java.util.*
 import javax.annotation.PostConstruct
 
 @Component
-class YamlConfig : Config {
-    private val configName = "./config.yml"
+class YamlConfig(private val configName: String) : Config {
+    constructor() : this("./config.yml")
+
     private val typeRef = object : TypeReference<Map<String, Any>>() {}
     private val mapper = ObjectMapper(YAMLFactory())
     private lateinit var tree: ObjectNode
