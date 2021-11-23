@@ -3,7 +3,6 @@ package com.github.svart63.kc.core.impl
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.test.context.event.annotation.BeforeTestClass
 import kotlin.test.assertEquals
 
 internal class YamlConfigTest {
