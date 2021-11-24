@@ -3,3 +3,4 @@ kafka-client.iml
 /logs
 /.idea
 favorite_topics.yml
+./config.yml

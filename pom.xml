@@ -30,7 +30,7 @@
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
         <resources>
             <resource>
-                <directory>./</directory>
+                <directory>./resources</directory>
                 <targetPath>..</targetPath>
                 <includes>
                     <include>config.yml</include>

@@ -15,7 +15,7 @@ internal class SerdeProviderTest {
     internal fun testProvideKeySerde() {
         every { config.keySerde() }.returns("StringSerde")
         every { config.serdePackages() }.returns(arrayOf("org.apache.kafka.common.serialization"))
-        val provider = SerdeProvider(config)
+        val provider = ReflectionSerdeProvider(config)
         provider.afterPropertiesSet()
         assertThat(provider.keySerde()).isInstanceOf(Serdes.StringSerde::class.java)
     }
@@ -24,7 +24,7 @@ internal class SerdeProviderTest {
     internal fun testProvideValueSerde() {
         every { config.valueSerde() }.returns("ByteArraySerde")
         every { config.serdePackages() }.returns(arrayOf("org.apache.kafka.common.serialization"))
-        val provider = SerdeProvider(config)
+        val provider = ReflectionSerdeProvider(config)
         provider.afterPropertiesSet()
         assertThat(provider.valueSerde()).isInstanceOf(Serdes.ByteArray()::class.java)
     }
@@ -33,7 +33,7 @@ internal class SerdeProviderTest {
     internal fun testProvideTransformer() {
         every { config.serdeTransformer() }.returns("com.github.svart63.kc.kafka.StringTransformer")
         every { config.serdePackages() }.returns(arrayOf("com.github.svart63.kc.kafka"))
-        val provider = SerdeProvider(config)
+        val provider = ReflectionSerdeProvider(config)
         provider.afterPropertiesSet()
         assertThat(provider.transformer()).isInstanceOf(StringTransformer::class.java)
     }
@@ -42,7 +42,7 @@ internal class SerdeProviderTest {
     internal fun testKeyProviderThrowsErrorIfNotDefined() {
         every { config.keySerde() }.returns("JsonSerde")
         every { config.serdePackages() }.returns(arrayOf("org.apache.kafka.common.serialization"))
-        val provider = SerdeProvider(config)
+        val provider = ReflectionSerdeProvider(config)
         provider.afterPropertiesSet()
         assertThatIllegalArgumentException().isThrownBy { provider.keySerde() }
             .withMessageContaining("StringSerde")

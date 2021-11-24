@@ -4,7 +4,7 @@ import org.apache.kafka.streams.KeyValue
 import org.apache.kafka.streams.kstream.Transformer
 import org.apache.kafka.streams.processor.ProcessorContext
 
-abstract class KafkaTimeBasedTransformer: Transformer<Any, Any, KeyValue<Long, Pair<String, String>>> {
+abstract class KafkaTimeBasedTransformer : Transformer<Any, Any, KeyValue<Long, Pair<String, String>>> {
     private lateinit var context: ProcessorContext
 
     override fun init(context: ProcessorContext?) {
