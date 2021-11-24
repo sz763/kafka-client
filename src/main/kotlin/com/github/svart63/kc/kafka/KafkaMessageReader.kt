@@ -21,7 +21,8 @@ import java.util.*
 class KafkaMessageReader @Autowired constructor(
     private val eventBroker: EventBroker,
     private val config: Config,
-    private val serdeProvider: SerdeProvider
+    private val serdeProvider: ReflectionSerdeProvider,
+    private val context: Context
 ) : DisposableBean {
     private lateinit var streams: KafkaStreams
     private val log = LoggerFactory.getLogger(this::class.java)
@@ -32,7 +33,8 @@ class KafkaMessageReader @Autowired constructor(
         StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.SHUTDOWN_APPLICATION
     }
 
-    fun start(topic: String) {
+    fun start() {
+        val topic = context.topicName()
         if (topic == topicName) {
             return
         }

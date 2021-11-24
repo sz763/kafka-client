@@ -1,10 +1,7 @@
 package com.github.svart63.kc.ui.swing.components
 
 import com.github.svart63.kc.core.Config
-import com.github.svart63.kc.ui.ContentPanel
-import com.github.svart63.kc.ui.MainWindow
-import com.github.svart63.kc.ui.ThemeService
-import com.github.svart63.kc.ui.TopicPanel
+import com.github.svart63.kc.ui.*
 import com.github.svart63.kc.ui.swing.utilities.MousePressed
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.ApplicationListener

@@ -5,8 +5,9 @@ import com.github.svart63.kc.core.DataHandler
 import com.github.svart63.kc.core.FavoriteTopics
 import com.github.svart63.kc.core.impl.ContainsDataFilter
 import com.github.svart63.kc.core.impl.NoopDataFilter
+import com.github.svart63.kc.kafka.Context
 import com.github.svart63.kc.kafka.KafkaMessageReader
-import com.github.svart63.kc.ui.ContentPanel
+import com.github.svart63.kc.ui.MessageConsumerPanel
 import com.github.svart63.kc.ui.TopicPanel
 import com.github.svart63.kc.ui.swing.utilities.KeyPressed
 import com.github.svart63.kc.ui.swing.utilities.ListModel
@@ -26,8 +27,9 @@ import javax.swing.JOptionPane.YES_NO_OPTION
 class SwingTopicPanel @Autowired constructor(
     private val dataHandler: DataHandler<List<String>, String, String>,
     private val kafkaMessageReader: KafkaMessageReader,
-    private val contentPanel: ContentPanel,
-    private val favoriteTopics: FavoriteTopics
+    private val contentPanel: MessageConsumerPanel,
+    private val favoriteTopics: FavoriteTopics,
+    private val context: Context
 ) : TopicPanel, SwingPanel("Topics") {
     private val topicModel = ListModel<String>()
     private val favoriteModel = ListModel<String>()
@@ -55,7 +57,8 @@ class SwingTopicPanel @Autowired constructor(
             val selectedValue = favoriteList.selectedValue
             if (e.clickCount == 2) {
                 contentPanel.clear()
-                kafkaMessageReader.start(selectedValue)
+                context.topicName(selectedValue)
+                kafkaMessageReader.start()
             }
             if (e.button == BUTTON3) {
                 val message = "Would you like remove '${selectedValue} from favorite list?"
@@ -110,7 +113,8 @@ class SwingTopicPanel @Autowired constructor(
         topicList.addMouseListener(MousePressed { e ->
             if (e.clickCount == 2) {
                 contentPanel.clear()
-                kafkaMessageReader.start(topicList.selectedValue)
+                context.topicName(topicList.selectedValue)
+                kafkaMessageReader.start()
             }
             if (e.button == BUTTON3) {
                 val topicName = topicList.selectedValue

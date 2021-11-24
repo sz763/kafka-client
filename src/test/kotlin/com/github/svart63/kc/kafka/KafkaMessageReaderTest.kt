@@ -13,7 +13,7 @@ import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.TopologyTestDriver
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.util.Properties
+import java.util.*
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -25,9 +25,9 @@ internal class KafkaMessageReaderTest {
     private val stringSerializer = Serdes.String().serializer()
     private val byteArraySerializer = Serdes.ByteArray().serializer()
     private val longSerializer = Serdes.Long().serializer()
-    private val serdeProvider = mockkClass(SerdeProvider::class)
+    private val serdeProvider = mockkClass(ReflectionSerdeProvider::class)
     private val config = mockkClass(Config::class)
-    private val reader = KafkaMessageReader(broker, config, serdeProvider)
+    private val reader = KafkaMessageReader(broker, config, serdeProvider, mockkClass(Context::class))
 
 
     @BeforeEach
