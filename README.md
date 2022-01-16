@@ -15,19 +15,20 @@ Simple kafka client for monitoring topic values.
 
 ## How to use
 
-- specify kafka hosts in config.yml like <code>host:port,host2:port2</code>
+- specify kafka `hosts` in config.yml like `host:port,host2:port2`
 - start java app
 - select topic in topic list
 - click twice at topic name in topic list
+- specify `kafka -> application.id` and  `kafka -> group.id` in `config.yml` or these properties will generated `kc_${UUID.randomUUID()`
 
 ## Actions
 
-### Filering topics
+### Filtering topics
 
 - for filtering topics - click to topic list and press <code>ctrl + f</code>
 - to reset filter - press <code>ctrl + f</code> and remove filtering value
 
-### Filering events
+### Filtering events
 
 #### Filter by event key
 
