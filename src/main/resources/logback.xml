@@ -26,7 +26,7 @@
     <root level="ERROR">
         <appender-ref ref="FILE"/>
     </root>
-    <logger name="com.github.svart63" level="INFO">
+    <logger name="com.github.salavatz" level="INFO" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
 </configuration>
