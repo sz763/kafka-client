@@ -9,7 +9,7 @@
     <root level="ERROR">
         <appender-ref ref="STDOUT"/>
     </root>
-    <logger name="com.github.svart63" level="INFO" additivity="false">
+    <logger name="com.github.salavatz" level="INFO" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
 </configuration>

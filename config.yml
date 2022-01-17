@@ -3,11 +3,11 @@ theme: "Darcula"
 stream:
   read.from.beginning: true
   serde.packages:
-    - "org.apache.kafka.common.serialization"
-    - "com.github.svart63.kc.kafka"
+  - "org.apache.kafka.common.serialization"
+  - "com.github.salavatz.kc.kafka"
   serde.key: "ByteArraySerde"
   serde.value: "ByteArraySerde"
-  serde.transformer: "com.github.svart63.kc.kafka.StringTransformer"
+  serde.transformer: "com.github.salavatz.kc.kafka.StringTransformer"
 table:
   date.format: "yyyy/MM/dd HH:ss:mm.SSSS"
   time.zone: null
