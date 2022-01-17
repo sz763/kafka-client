@@ -1,6 +1,6 @@
 # kafka-client
 
-Simple kafka client for monitoring topic values.
+Simple kafka client for monitoring topic values in real time, without pressing any refresh buttons.
 
 <img src="https://user-images.githubusercontent.com/5479948/149766027-119ab947-b72e-4a8b-ac9d-8f5f3572a6e7.png" width="610" height="414">
 
