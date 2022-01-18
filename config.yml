@@ -4,10 +4,10 @@ stream:
   read.from.beginning: true
   serde.packages:
   - "org.apache.kafka.common.serialization"
-  - "com.github.salavatz.kc.kafka"
+  - "com.github.sz763.kc.kafka"
   serde.key: "ByteArraySerde"
   serde.value: "ByteArraySerde"
-  serde.transformer: "com.github.salavatz.kc.kafka.StringTransformer"
+  serde.transformer: "com.github.sz763.kc.kafka.StringTransformer"
 table:
   date.format: "yyyy/MM/dd HH:ss:mm.SSSS"
   time.zone: null
