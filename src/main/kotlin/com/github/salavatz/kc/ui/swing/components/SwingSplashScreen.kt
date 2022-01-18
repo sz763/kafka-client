@@ -1,7 +1,7 @@
 package com.github.salavatz.kc.ui.swing.components
 
 import com.github.salavatz.kc.ui.SplashScreen
-import org.springframework.stereotype.Service
+import org.springframework.stereotype.Component
 import java.awt.BorderLayout
 import java.awt.Dimension
 import javax.swing.JFrame
@@ -10,7 +10,7 @@ import javax.swing.JPanel
 import javax.swing.JProgressBar
 import javax.swing.border.EmptyBorder
 
-@Service
+@Component
 class SwingSplashScreen : JFrame(), SplashScreen {
     private val progress = JProgressBar()
     private val label = JLabel()
@@ -49,7 +49,7 @@ class SwingSplashScreen : JFrame(), SplashScreen {
     }
 
     override fun updateProgress(item: Int) {
-        progress.value = progress.value + item
+        progress.value += item
     }
 
     override fun progressMaxValue(count: Int) {
