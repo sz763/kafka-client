@@ -86,18 +86,14 @@ class KafkaMessageReader @Autowired constructor(
         }
     }
 
-    internal fun resetTopicOffset(
-        client: KafkaConsumer<Any, Any>,
-        topic: String
-    ) {
-        val partition = client.partitionsFor(topic)
+    internal fun resetTopicOffset(client: KafkaConsumer<Any, Any>, topic: String) {
+        client.partitionsFor(topic)
             .map { partInfo -> TopicPartition(partInfo.topic(), partInfo.partition()) }
             .toList()
             .also(client::assign)
             .filter { client.position(it) > 0 }
             .also(client::seekToBeginning)
-            .onEach { log.info("For topic '$topicName' position has been reset to: ${client.position(it)}") }
-            .firstOrNull()
-        partition?.let { client.commitSync() }
+            .forEach { log.info("For topic '$topicName' position has been reset to: ${client.position(it)}") }
+        client.commitSync()
     }
 }
