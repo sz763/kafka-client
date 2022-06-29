@@ -19,22 +19,22 @@ Simple kafka client for monitoring topic values in real time, without pressing a
 
 ## Actions
 
-### Filtering topics
+### Filter topics
 
 - to filter topics - click on topic list and press <code>ctrl + f</code>
-- to reset filter - press <code>ctrl + f</code> and remove filtering value
+- to reset filter - press <code>ctrl + f</code> and remove filter value
 
-### Filtering events
+### Filter events
 
 #### Filter by event key
 
 - to filter event by key - click on table and press <code>ctrl + shfit + f</code>
-- to reset filter - press <code>ctrl + f</code> and remove filtering value
+- to reset filter - press <code>ctrl + f</code> and remove filter value
 
 #### Filter by event value
 
 - to filter events by value - click on table and press <code>ctrl + f</code>
-- to reset filter - press <code>ctrl + f</code> and remove filtering value
+- to reset filter - press <code>ctrl + f</code> and remove filter value
 
 ### Copy event key/value
 
