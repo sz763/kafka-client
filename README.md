@@ -11,11 +11,11 @@ Simple kafka client for monitoring topic values in real time, without pressing a
 
 ## How to use
 
-- specify kafka `hosts` in config.yml like `host:port,host2:port2`
+- specify kafka `bootstrap.servers` in config.yml like `host:port,host2:port2`
+- specify `kafka -> application.id` and  `kafka -> group.id` in `config.yml` or these properties will be generated `kc_${UUID.randomUUID()}`
 - start java app
 - select topic in topic list
 - click twice on the topic name in topic list
-- specify `kafka -> application.id` and  `kafka -> group.id` in `config.yml` or these properties will be generated `kc_${UUID.randomUUID()}`
 
 ## Actions
 
